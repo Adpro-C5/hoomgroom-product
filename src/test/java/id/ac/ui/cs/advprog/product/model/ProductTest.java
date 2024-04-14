@@ -5,72 +5,73 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ProductTest {
 
-    product Product;
+    Product product;
 
     @BeforeEach
     void setUp() {
         this.product = new Product();
-        this.product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        UUID id = UUID.fromString("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        this.product.setId(id);
         this.product.setProductName("Kursi Mewah");
 
         ArrayList<String> categories = new ArrayList<String>();
         categories.add("Kursi");
         categories.add("Kayu");
 
-        this.product.setProductCategories(categories);
-        this.product.setProductDescription("Sebuah kursi yang dibuat dengan kayu jati");
-        this.product.setProductImagePath("/sampel");
-        this.product.setProductPrice(10000);
-        this.product.setProductDiscountedPrice(8000);
-        this.product.setProductSales(1000);
+        this.product.setCategories(categories);
+        this.product.setDescription("Sebuah kursi yang dibuat dengan kayu jati");
+        this.product.setImagePath("/sampel");
+        this.product.setPrice(Double.valueOf(10000));
+        this.product.setDiscountedPrice(Double.valueOf(8000));
+        this.product.setSales(Integer.valueOf(1000));
     }
 
     @Test
     void testGetProductID() {
-        assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", 
-            this.product.getID()
-        );
+        UUID id = UUID.fromString("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        assertEquals(id,  this.product.getId());
     }
 
     @Test
     void testGetProductName() {
-        assertEquals("Kursi Mewah", this.product.getProductNameID());
+        assertEquals("Kursi Mewah", this.product.getProductName());
     }
 
     @Test
     void testGetProductCategories() {
-        ArrayList<String> result = this.Product.getProductCategories();
-        assertEquals("Kursi", result[0]);
-        assertEquals("Kayu", result[1]);
+        ArrayList<String> result = this.product.getCategories();
+        assertEquals("Kursi", result.get(0));
+        assertEquals("Kayu", result.get(1));
     }
 
     @Test
     void testGetProductDescription() {
         assertEquals("Sebuah kursi yang dibuat dengan kayu jati", 
-            this.product.getProductDescription()
+            this.product.getDescription()
         );
     }
 
     @Test
     void testGetProductImagePath() {
-        assertEquals("/sampel", this.product.getProductImagePath());
+        assertEquals("/sampel", this.product.getImagePath());
     }
 
     @Test
     void testGetProductPrice() {
-        assertEquals(10000, this.product.getProductPrice());
+        assertEquals(10000, this.product.getPrice());
     }
 
     @Test
     void testGetProductDiscountedPrice() {
-        assertEquals(8000, this.product.getProductDiscountedPrice());
+        assertEquals(8000, this.product.getDiscountedPrice());
     }
 
     @Test
     void testGetProductSales() {
-        assertEquals(1000, this.product.getProductSales());
+        assertEquals(1000, this.product.getSales());
     }
 }
