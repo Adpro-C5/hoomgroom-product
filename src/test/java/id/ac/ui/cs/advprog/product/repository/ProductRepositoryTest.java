@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,8 +19,9 @@ public class ProductRepositoryTest {
 
   @BeforeEach
   void setUp() {
+    productRepository = new ProductRepository();
     Product product1 = new Product();
-    UUID id = UUID.fromString("eb558e9f-1c39-460e-8860-71af6af63bd6");
+    UUID id = UUID.randomUUID();
     product1.setId(id);
     product1.setProductName("Kursi Mewah");
 
@@ -37,8 +37,8 @@ public class ProductRepositoryTest {
     product1.setSales(Integer.valueOf(1000));
 
     Product product2 = new Product();
-    UUID id2 = UUID.fromString("eawpidhawaw-aluwblaa-aowndawb");
-    product2.setId(id);
+    UUID id2 = UUID.randomUUID();
+    product2.setId(id2);
     product2.setProductName("Meja Mewah");
 
     ArrayList<String> categories2 = new ArrayList<String>();
@@ -52,6 +52,7 @@ public class ProductRepositoryTest {
     product2.setDiscountedPrice(Double.valueOf(24000));
     product2.setSales(Integer.valueOf(500));
 
+    products = new ArrayList<Product>();
     products.add(product1);
     products.add(product2);
   }
@@ -94,9 +95,9 @@ public class ProductRepositoryTest {
     productRepository.save(product1);
     productRepository.save(product2);
 
-    Iterator<Product> results = productRepository.getAll();
-    assertEquals(product1, results.next());
-    assertEquals(product2, results.next());
+    Iterator<Product> results = productRepository.findAll();
+    assertEquals(product1.getId(), results.next().getId());
+    assertEquals(product2.getId(), results.next().getId());
   }
 
   @Test
@@ -107,16 +108,16 @@ public class ProductRepositoryTest {
     productRepository.save(product1);
     productRepository.save(product2);
 
-    Product result = productRepository.findById(product2.getId());
-    assertEquals(product2, result);
+    Product result = productRepository.findById(product2.getId().toString());
+    assertEquals(product2.getId(), result.getId());
   }
 
   @Test
-  void testDeleteById() {
+ void testDeleteById() {
     Product product1 = products.get(0);
 
     productRepository.save(product1);
-    productRepository.deleteById(product1.getId());
+    productRepository.deleteById(product1.getId().toString());
     Iterator<Product> result = productRepository.findAll();
     assertFalse(result.hasNext());
   }
