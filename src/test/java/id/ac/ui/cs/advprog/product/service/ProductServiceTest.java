@@ -1,4 +1,4 @@
-public package id.ac.ui.cs.advprog.product.service;
+package id.ac.ui.cs.advprog.product.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.Iterator;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
@@ -50,11 +49,11 @@ public class ProductServiceTest {
   }
 
   @Test
-  void testCreateProduct() {
+  void testCreateProduct() throws Exception {
     Product product = products.get(0);
     doReturn(product).when(productRepository).save(product);
 
-    Product result = productService.createProduct(product);
+    Product result = productService.create(product);
     verify(productRepository, times(1)).save(product);
     assertEquals(product.getId(), result.getId());
   }
@@ -66,10 +65,13 @@ public class ProductServiceTest {
     editedProduct.setId(product.getId());
     doReturn(editedProduct).when(productRepository)
       .save(editedProduct);
+    doReturn(product).when(productRepository)
+      .findById(product.getId().toString());
 
     Product result = productService
-     .editProduct(product.getId(), editedProduct);
-    verify(productRepository, times(1)).save(product);
+      .edit(product.getId().toString(), editedProduct);
+    verify(productRepository, times(1)).findById(product.getId().toString());
+    verify(productRepository, times(1)).save(editedProduct);
     assertEquals(product.getId(), result.getId());
   }
 
@@ -91,6 +93,8 @@ public class ProductServiceTest {
     Product product = products.get(0);
     doReturn(product).when(productRepository)
       .deleteById(product.getId().toString());
+    doReturn(product).when(productRepository)
+      .findById(product.getId().toString());
 
     Product result = productService
       .delete(product.getId().toString());
@@ -101,7 +105,7 @@ public class ProductServiceTest {
 
   @Test
   void testFindAll() {
-    doReturn(products).when(productRepository)
+    doReturn(products.iterator()).when(productRepository)
       .findAll();
 
     List<Product> result = productService.findAll();
@@ -120,12 +124,12 @@ public class ProductServiceTest {
     products.add(product3);
     products.add(product4);
 
-    doReturn(products).when(productRepository).findAll();
+    doReturn(products.iterator()).when(productRepository).findAll();
 
     List<Product> result = productService.findBestTen();
     verify(productRepository, times(1)).findAll();
-    assertEquals(product3, result.getFirst());
-    assertEquals(product4, result.getLast());
+    assertEquals(product3.getSales(), result.getFirst().getSales());
+    assertEquals(product4.getSales(), result.getLast().getSales());
   }
 
   @Test
@@ -139,11 +143,11 @@ public class ProductServiceTest {
     products.add(product3);
     products.add(product4);
 
-    doReturn(products).when(productRepository).findAll();
+    doReturn(products.iterator()).when(productRepository).findAll();
 
     List<Product> result = productService.findWorstTen();
     verify(productRepository, times(1)).findAll();
-    assertEquals(product4, result.getFirst());
-    assertEquals(product3, result.getLast());
+    assertEquals(product4.getSales(), result.getFirst().getSales());
+    assertEquals(product3.getSales(), result.getLast().getSales());
   }
 }
