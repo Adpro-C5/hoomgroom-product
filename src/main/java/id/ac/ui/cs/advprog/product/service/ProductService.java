@@ -13,6 +13,7 @@ import id.ac.ui.cs.advprog.product.model.Product;
 import id.ac.ui.cs.advprog.product.repository.ManageRepository;
 
 @Service
+@Qualifier("productService")
 public class ProductService implements ManageService<Product>{
   @Autowired
   @Qualifier("productRepository")
