@@ -8,11 +8,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class PromoCode {
-  UUID id;
-  String name;
-  String description;
-  LocalDate expiredDate;
-  Double minimumPurchase;
+  private UUID id;
+  private String name;
+  private String description;
+  private LocalDate expiredDate;
+  private Double minimumPurchase;
 
   public void setName(String name) throws Exception {
     String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
