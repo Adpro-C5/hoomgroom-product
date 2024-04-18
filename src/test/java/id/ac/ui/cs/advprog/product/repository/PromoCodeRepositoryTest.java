@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PromoCodeTest {
+public class PromoCodeRepositoryTest {
   PromoCodeRepository promoCodeRepository;
   List<PromoCode> promoCodes;
 
