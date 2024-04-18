@@ -1,5 +1,4 @@
 package id.ac.ui.cs.advprog.product.repository;
-import id.ac.ui.cs.advprog.product.model.Product;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
 
 import java.util.UUID;
@@ -19,7 +18,7 @@ public class PromoCodeTest {
   List<PromoCode> promoCodes;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws Exception {
     promoCodeRepository = new PromoCodeRepository();
     PromoCode promoCode1 = new PromoCode();
     UUID id = UUID.randomUUID();
@@ -88,7 +87,7 @@ public class PromoCodeTest {
     promoCodeRepository.save(promoCode1);
     promoCodeRepository.save(promoCode2);
 
-    Product result = promoCodeRepository
+    PromoCode result = promoCodeRepository
       .findById(promoCode2.getId().toString());
     assertEquals(promoCode2.getId(), result.getId());
   }
@@ -99,7 +98,7 @@ public class PromoCodeTest {
 
     promoCodeRepository.save(promoCode);
     promoCodeRepository.deleteById(promoCode.getId().toString());
-    Iterator<Product> result = promoCodeRepository.findAll();
+    Iterator<PromoCode> result = promoCodeRepository.findAll();
     assertFalse(result.hasNext());
   }
 }
