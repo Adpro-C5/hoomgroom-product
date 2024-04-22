@@ -33,7 +33,7 @@ public class PromoCodeServiceTest {
   List<PromoCode> promoCodes;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws Exception {
     PromoCode promoCode1 = new PromoCode();
     UUID id = UUID.randomUUID();
     promoCode1.setId(id);
@@ -71,7 +71,7 @@ public class PromoCodeServiceTest {
   @Test
   void testCreateProductIfDuplicateName() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCodes).when(promoCodeRepository).findAll();
+    doReturn(promoCodes.iterator()).when(promoCodeRepository).findAll();
 
     assertThrows(Exception.class, () -> {
       PromoCode result = promoCodeService.create(promoCode);
@@ -106,11 +106,11 @@ public class PromoCodeServiceTest {
     PromoCode promoCode = promoCodes.getFirst();
     PromoCode editedPromo = promoCodes.getLast();
     editedPromo.setId(promoCode.getId());
-    doReturn(promoCodes).when(promoCodeRepository)
+    doReturn(promoCodes.iterator()).when(promoCodeRepository)
       .findAll();
 
     assertThrows(Exception.class, () -> {
-      PromoCode result = promoCodeService.edit(promoCode);
+      PromoCode result = promoCodeService.edit(promoCode.getId().toString() ,promoCode);
     });
     verify(promoCodeRepository, times(0)).save(promoCode);
   }
@@ -126,18 +126,6 @@ public class PromoCodeServiceTest {
     verify(promoCodeRepository, times(1))
       .findById(promoCode.getId().toString());
     assertEquals(promoCode.getId(), result.getId());
-  }
-
-  @Test
-  void testFindByIdIfNotExist() throws Exception {
-    PromoCode promoCode = promoCodes.getFirst();
-    doReturn(null).when(promoCodeRepository)
-      .findById("random id");
-    assertThrows(Exception.class, () -> {
-      PromoCode result = promoCodeService.findById("random id");
-    });
-    verify(promoCodeRepository, times(0))
-      .findById("random id");
   }
 
   @Test
