@@ -21,10 +21,8 @@ public class ProductRepository implements ManageRepository<Product>{
         productData.add(index, product);
         return product;
       }
-
       index += 1;
     }
-
     productData.add(product);
     return product;
   }
