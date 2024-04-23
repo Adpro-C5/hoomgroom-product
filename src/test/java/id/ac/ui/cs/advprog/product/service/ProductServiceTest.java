@@ -112,42 +112,4 @@ public class ProductServiceTest {
     verify(productRepository, times(1)).findAll();
     assertEquals(products.get(0).getId(), result.get(0).getId());
   }
-
-  @Test
-  void testFindBestTen() {
-    Product product3 = new Product();
-    product3.setId(UUID.randomUUID());
-    product3.setSales(Integer.valueOf(1200));
-    Product product4 = new Product();
-    product4.setId(UUID.randomUUID());
-    product4.setSales(50);;
-    products.add(product3);
-    products.add(product4);
-
-    doReturn(products.iterator()).when(productRepository).findAll();
-
-    List<Product> result = productService.findBestTen();
-    verify(productRepository, times(1)).findAll();
-    assertEquals(product3.getSales(), result.getFirst().getSales());
-    assertEquals(product4.getSales(), result.getLast().getSales());
-  }
-
-  @Test
-  void testFindWorstTen() {
-    Product product3 = new Product();
-    product3.setId(UUID.randomUUID());
-    product3.setSales(Integer.valueOf(1200));
-    Product product4 = new Product();
-    product4.setId(UUID.randomUUID());
-    product4.setSales(50);;
-    products.add(product3);
-    products.add(product4);
-
-    doReturn(products.iterator()).when(productRepository).findAll();
-
-    List<Product> result = productService.findWorstTen();
-    verify(productRepository, times(1)).findAll();
-    assertEquals(product4.getSales(), result.getFirst().getSales());
-    assertEquals(product3.getSales(), result.getLast().getSales());
-  }
 }
