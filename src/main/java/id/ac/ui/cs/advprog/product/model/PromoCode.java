@@ -3,6 +3,9 @@ package id.ac.ui.cs.advprog.product.model;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.UUID;
+
+import id.ac.ui.cs.advprog.product.enums.AlphaNumeric;
+
 import java.time.LocalDate;
 
 @Getter
@@ -15,9 +18,8 @@ public class PromoCode {
   private Double minimumPurchase;
 
   public void setName(String name) throws Exception {
-    String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     for(char letter : name.toCharArray()) {
-      if (!alphanumeric.contains(String.valueOf(letter))) {
+      if (!AlphaNumeric.contains(letter)) {
         throw new Exception(
           "Name contain non-alphanumeric characters"
         );
