@@ -74,7 +74,7 @@ public class PromoCodeTest {
     @Test
     void testSetExpiredDateIfValid() {
         promoCode.setExpiredDate(LocalDate
-            .of(2050, 12, 12));
+            .of(2030, 12, 12));
         assertEquals(LocalDate.of(2030, 12, 12)
             , promoCode.getExpiredDate());
     }
