@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.product.controller;
 import id.ac.ui.cs.advprog.product.service.ManageService;
+import id.ac.ui.cs.advprog.product.service.StatsisticService;
 import id.ac.ui.cs.advprog.product.model.Product;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
 
@@ -16,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,6 +38,13 @@ public class ManageControllerTest {
   @MockBean
   @Qualifier("productService")
   ManageService<Product> productService;
+
+  @MockBean
+  @Qualifier("promoCodeService")
+  ManageService<PromoCode> promoService;
+
+  @MockBean
+  StatsisticService statisticService;
 
   List<Product> products;
   List<PromoCode> promoCodes;
@@ -91,10 +98,10 @@ public class ManageControllerTest {
     Product product = products.getFirst();
     doReturn(product).when(productService).findById(ArgumentMatchers.any());
 
-    mockMvc.perform(get("/product/{id}"))
+    mockMvc.perform(get("/product/adadadad"))
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.name", is(product.getProductName())));
+      .andExpect(jsonPath("$.productName", is(product.getProductName())));
   }
 
   @Test
@@ -136,9 +143,9 @@ public class ManageControllerTest {
   @Test
   void testGetPromoById() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCode).when(productService).findById(ArgumentMatchers.any());
+    doReturn(promoCode).when(promoService).findById(ArgumentMatchers.any());
 
-    mockMvc.perform(get("/promo_code/{id}"))
+    mockMvc.perform(get("/promo_code/anyid"))
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.name", is(promoCode.getName())));
