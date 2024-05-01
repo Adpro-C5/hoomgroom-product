@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.springframework.http.MediaType;
 
@@ -26,8 +27,10 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,7 +59,8 @@ public class ManageControllerTest {
 
   List<Product> products;
   List<PromoCode> promoCodes;
-  ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+  ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule())
+    .configure(SerializationFeature.WRAP_ROOT_VALUE, false);
   ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
 
   @BeforeEach
@@ -121,30 +125,33 @@ public class ManageControllerTest {
   @Test
   void testCreateProductPost() throws Exception {
     Product product = products.getFirst();
-    doReturn(product).when(productService.create(product));
+    doReturn(product).when(productService).create(ArgumentMatchers.any());
 
     String request = writer.writeValueAsString(product);
     mockMvc.perform(post("/product/add")
       .contentType(MediaType.APPLICATION_JSON)
       .content(request))
-      .andExpect(status().isCreated());
+      .andExpect(status().isCreated())
+      .andExpect(jsonPath("$.productName", is(product.getProductName())));
     
-    verify(productService, times(1)).create(product);
+    verify(productService, times(1))
+      .create(ArgumentMatchers.any());
   }
 
   @Test
   void testEditProductPost() throws Exception {
     Product product = products.getFirst();
-    doReturn(product).when(productService.edit(ArgumentMatchers.any() ,product));
+    doReturn(product).when(productService).edit(ArgumentMatchers.any() ,ArgumentMatchers.any());
 
     String request = writer.writeValueAsString(product);
-    mockMvc.perform(post("/product/edit/id")
+    mockMvc.perform(put("/product/edit/id")
       .contentType(MediaType.APPLICATION_JSON)
       .content(request))
-      .andExpect(status().isOk());
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.productName", is(product.getProductName())));
     
     verify(productService, times(1))
-      .edit(ArgumentMatchers.any(), product);
+      .edit(ArgumentMatchers.any(), ArgumentMatchers.any());
   }
 
   @Test
@@ -152,7 +159,7 @@ public class ManageControllerTest {
     Product product = products.getFirst();
     doReturn(product).when(productService).delete(ArgumentMatchers.any());
     
-    mockMvc.perform(post("/product/delete/id"))
+    mockMvc.perform(delete("/product/delete/id"))
       .andExpect(status().isOk());
 
     verify(productService, times(1))
@@ -183,31 +190,33 @@ public class ManageControllerTest {
   @Test
   void testCreatePromoCodePost() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCode).when(promoService.create(promoCode));
+    doReturn(promoCode).when(promoService).create(ArgumentMatchers.any());
 
-    String request = writer.writeValueAsString(promoCodes);
+    String request = writer.writeValueAsString(promoCode);
     mockMvc.perform(post("/promo_code/add")
       .contentType(MediaType.APPLICATION_JSON)
+      .characterEncoding("utf-8")
       .content(request))
       .andExpect(status().isCreated());
     
     verify(promoService, times(1))
-      .create(promoCode);
+      .create(ArgumentMatchers.any());
   }
 
   @Test
   void testEditPromoCodePost() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCode).when(promoService.edit(ArgumentMatchers.any() , promoCode));
+    doReturn(promoCode).when(promoService).edit(ArgumentMatchers.any() , ArgumentMatchers.any());
 
-    String request = writer.writeValueAsString(promoCodes);
-    mockMvc.perform(post("/promo_code/edit/id")
+    String request = writer.writeValueAsString(promoCode);
+    System.out.println(request);
+    mockMvc.perform(put("/promo_code/edit/id")
       .contentType(MediaType.APPLICATION_JSON)
       .content(request))
       .andExpect(status().isOk());
     
     verify(promoService, times(1))
-      .edit(ArgumentMatchers.any(), promoCode);
+      .edit(ArgumentMatchers.any(), ArgumentMatchers.any());
   }
 
   @Test
@@ -215,7 +224,7 @@ public class ManageControllerTest {
     PromoCode promoCode = promoCodes.getFirst();
     doReturn(promoCode).when(promoService).delete(ArgumentMatchers.any());
 
-    mockMvc.perform(post("/promo_code/delete/id"))
+    mockMvc.perform(delete("/promo_code/delete/id"))
       .andExpect(status().isOk());
 
     verify(promoService, times(1))
@@ -229,7 +238,6 @@ public class ManageControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].productName", is(products.get(0).getProductName())))
       .andExpect(jsonPath("$[1].productName", is(products.get(1).getProductName())));
-
   }
 
   @Test
@@ -239,6 +247,5 @@ public class ManageControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].productName", is(products.get(0).getProductName())))
       .andExpect(jsonPath("$[1].productName", is(products.get(1).getProductName())));
-
   }
 }

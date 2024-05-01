@@ -3,9 +3,8 @@ package id.ac.ui.cs.advprog.product.model;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.UUID;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import id.ac.ui.cs.advprog.product.enums.AlphaNumeric;
-
 import java.time.LocalDate;
 
 @Getter
@@ -14,6 +13,7 @@ public class PromoCode {
   private UUID id;
   private String name;
   private String description;
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate expiredDate;
   private Double minimumPurchase;
 
@@ -26,6 +26,7 @@ public class PromoCode {
       }
     }
     this.name = name;
+    
   }
 }
 
