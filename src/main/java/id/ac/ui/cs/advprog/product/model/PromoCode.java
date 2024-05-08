@@ -5,8 +5,13 @@ import lombok.Setter;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import id.ac.ui.cs.advprog.product.enums.AlphaNumeric;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
+@Table(name = "promo_code")
+@Entity
 @Getter
 @Setter
 public class PromoCode {
