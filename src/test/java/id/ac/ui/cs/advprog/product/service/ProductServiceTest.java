@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import id.ac.ui.cs.advprog.product.repository.ProductRepository;
 import id.ac.ui.cs.advprog.product.model.Product;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
@@ -53,13 +55,13 @@ public class ProductServiceTest {
     Product product = products.get(0);
     doReturn(product).when(productRepository).save(product);
 
-    Product result = productService.create(product);
+    Product result = productService.create(product).get();
     verify(productRepository, times(1)).save(product);
     assertEquals(product.getId(), result.getId());
   }
 
   @Test
-  void testEditProduct() {
+  void testEditProduct() throws NoSuchElementException, InterruptedException, ExecutionException {
     Product product = products.get(0);
     Product editedProduct = products.get(1);
     editedProduct.setId(product.getId());
@@ -69,27 +71,27 @@ public class ProductServiceTest {
       .findById(product.getId().toString());
 
     Product result = productService
-      .edit(product.getId().toString(), editedProduct);
+      .edit(product.getId().toString(), editedProduct).get();
     verify(productRepository, times(1)).findById(product.getId().toString());
     verify(productRepository, times(1)).save(editedProduct);
     assertEquals(product.getId(), result.getId());
   }
 
   @Test 
-  void testFindById() {
+  void testFindById() throws InterruptedException, ExecutionException {
     Product product = products.get(0);
     doReturn(product).when(productRepository)
       .findById(product.getId().toString());
 
     Product result = productService
-      .findById(product.getId().toString());
+      .findById(product.getId().toString()).get();
     verify(productRepository, times(1))
       .findById(product.getId().toString());
     assertEquals(product.getId(), result.getId());
   }
 
   @Test
-  void testDelete() {
+  void testDelete() throws NoSuchElementException, InterruptedException, ExecutionException {
     Product product = products.get(0);
     doReturn(product).when(productRepository)
       .deleteById(product.getId().toString());
@@ -97,18 +99,18 @@ public class ProductServiceTest {
       .findById(product.getId().toString());
 
     Product result = productService
-      .delete(product.getId().toString());
+      .delete(product.getId().toString()).get();
     verify(productRepository, times(1))
       .deleteById(product.getId().toString());
     assertEquals(product.getId(), result.getId());
   }
 
   @Test
-  void testFindAll() {
+  void testFindAll() throws InterruptedException, ExecutionException {
     doReturn(products.iterator()).when(productRepository)
       .findAll();
 
-    List<Product> result = productService.findAll();
+    List<Product> result = productService.findAll().get();
     verify(productRepository, times(1)).findAll();
     assertEquals(products.get(0).getId(), result.get(0).getId());
   }

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import id.ac.ui.cs.advprog.product.model.Product;
@@ -20,45 +22,50 @@ public class ProductService implements ManageService<Product>{
   private ManageRepository<Product> repository; 
 
   @Override
-  public Product findById(String id) {
-    return repository.findById(id);
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<Product> findById(String id) {
+    return CompletableFuture.completedFuture(repository.findById(id));
   }
 
   @Override
-  public List<Product> findAll() {
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<List<Product>> findAll() {
     Iterator<Product> productIterator = repository.findAll();
     List<Product> products = new ArrayList<Product>();
     productIterator.forEachRemaining(products::add);
-    return products;
+    return CompletableFuture.completedFuture(products);
   }
 
   @Override
-  public Product delete(String id) throws NoSuchElementException {
-    Product foundProduct = this.findById(id);
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<Product> delete(String id) throws NoSuchElementException {
+    Product foundProduct = repository.findById(id);
     if (foundProduct != null) {
-      return repository.deleteById(id);
+      return CompletableFuture.completedFuture(repository.deleteById(id));
     } else {   
       throw new NoSuchElementException("Product doesn't exists");
     } 
   }
 
   @Override
-  public Product create(Product product) throws Exception {
-    Product foundProduct = this.findById(product.getId().toString());
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<Product> create(Product product) throws Exception {
+    Product foundProduct = repository.findById(product.getId().toString());
     if (foundProduct == null) {
       repository.save(product);
-      return product;
+      return CompletableFuture.completedFuture(product);
     } else {   
       throw new Exception("Product already exists");
     } 
   }
 
   @Override
-  public Product edit(String id, Product product) throws NoSuchElementException {
-    Product foundProduct = this.findById(product.getId().toString());
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<Product> edit(String id, Product product) throws NoSuchElementException {
+    Product foundProduct = repository.findById(product.getId().toString());
     if (foundProduct != null) {
       repository.save(product);
-      return product;
+      return CompletableFuture.completedFuture(product);
     } else {   
       throw new NoSuchElementException("Product doesn't exists");
     } 

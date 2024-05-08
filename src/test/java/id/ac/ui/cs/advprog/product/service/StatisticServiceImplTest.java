@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ public class StatisticServiceImplTest {
   }
 
   @Test
-  void testFindBestTen() {
+  void testFindBestTen() throws InterruptedException, ExecutionException {
     Product product3 = new Product();
     product3.setId(UUID.randomUUID());
     product3.setSales(Integer.valueOf(1200));
@@ -61,14 +62,14 @@ public class StatisticServiceImplTest {
 
     doReturn(products.iterator()).when(productRepository).findAll();
 
-    List<Product> result = statisticService.findBestTen();
+    List<Product> result = statisticService.findBestTen().get();
     verify(productRepository, times(1)).findAll();
     assertEquals(product3.getSales(), result.getFirst().getSales());
     assertEquals(product4.getSales(), result.getLast().getSales());
   }
 
   @Test
-  void testFindWorstTen() {
+  void testFindWorstTen() throws InterruptedException, ExecutionException {
     Product product3 = new Product();
     product3.setId(UUID.randomUUID());
     product3.setSales(Integer.valueOf(1200));
@@ -80,7 +81,7 @@ public class StatisticServiceImplTest {
 
     doReturn(products.iterator()).when(productRepository).findAll();
 
-    List<Product> result = statisticService.findWorstTen();
+    List<Product> result = statisticService.findWorstTen().get();
     verify(productRepository, times(1)).findAll();
     assertEquals(product4.getSales(), result.getFirst().getSales());
     assertEquals(product3.getSales(), result.getLast().getSales());

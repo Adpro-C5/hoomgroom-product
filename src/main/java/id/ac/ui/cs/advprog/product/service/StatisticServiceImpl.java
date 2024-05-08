@@ -3,9 +3,11 @@ package id.ac.ui.cs.advprog.product.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import id.ac.ui.cs.advprog.product.model.Product;
@@ -18,8 +20,9 @@ public class StatisticServiceImpl implements StatsisticService {
   @Qualifier("productRepository")
   ManageRepository<Product> repository;
 
-  
-  public List<Product> findBestTen() {
+  @Override
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<List<Product>> findBestTen() {
     List<Product> result = new ArrayList<Product>();
     Iterator<Product> allProducts = repository.findAll();
     
@@ -55,13 +58,15 @@ public class StatisticServiceImpl implements StatsisticService {
       index += 1;
     }
     if (result.size() > 10) {
-      return result.subList(0, 10);
+      return CompletableFuture.completedFuture(result.subList(0, 10));
     } else {
-      return result;
+      return CompletableFuture.completedFuture(result);
     }
   }
-
-  public List<Product> findWorstTen() {
+  
+  @Override
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<List<Product>> findWorstTen() {
     List<Product> result = new ArrayList<Product>();
     Iterator<Product> allProducts = repository.findAll();
     
@@ -97,9 +102,9 @@ public class StatisticServiceImpl implements StatsisticService {
       index += 1;
     }
     if (result.size() > 10) {
-      return result.subList(0, 10);
+      return CompletableFuture.completedFuture(result.subList(0, 10));
     } else {
-      return result;
+      return CompletableFuture.completedFuture(result);
     }
   }
 }

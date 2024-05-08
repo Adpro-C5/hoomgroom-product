@@ -35,20 +35,28 @@ public class ManageController {
   
   @GetMapping("/product/list")
   public ResponseEntity<List<Product>> getProductPage() {
-    List<Product> products = productService.findAll();
-    return ResponseEntity.status(HttpStatus.OK).body(products);
+    try {
+      List<Product> products = productService.findAll().get();
+      return ResponseEntity.status(HttpStatus.OK).body(products);      
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+    }
   }
 
   @GetMapping("/product/{id}")
   public ResponseEntity<Product> getProductById(@PathVariable("id") String id) {
-    Product product = productService.findById(id);
-    return ResponseEntity.status(HttpStatus.OK).body(product);
+    try {
+      Product product = productService.findById(id).get();
+      return ResponseEntity.status(HttpStatus.OK).body(product);        
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+    }
   }
 
   @PostMapping("/product/add")
   public ResponseEntity<Product> createProductPost(@RequestBody Product product) {
     try {
-      Product createdProduct = productService.create(product);
+      Product createdProduct = productService.create(product).get();
       return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
@@ -58,40 +66,52 @@ public class ManageController {
   @PutMapping("/product/edit/{id}")
   public ResponseEntity<Product> editProductPost(@PathVariable("id") String id, @RequestBody Product product) {
     try {
-      Product editedProduct = productService.edit(id, product);  
+      Product editedProduct = productService.edit(id, product).get();  
       return ResponseEntity.status(HttpStatus.OK).body(editedProduct);
     } catch (NoSuchElementException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
     }
   }
 
   @DeleteMapping("/product/delete/{id}")
   public ResponseEntity<Product> deleteProduct(@PathVariable("id") String id) {
     try {
-      Product deletedProduct = productService.delete(id);  
+      Product deletedProduct = productService.delete(id).get();  
       return ResponseEntity.status(HttpStatus.OK).body(deletedProduct);
     } catch (NoSuchElementException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
     }
   }
 
   @GetMapping("/promo_code/list")
   public ResponseEntity<List<PromoCode>> getPromoCodePage(Model model) {
-    List<PromoCode> promos = promoService.findAll();
-    return ResponseEntity.status(HttpStatus.OK).body(promos);
+    try {
+      List<PromoCode> promos = promoService.findAll().get();
+      return ResponseEntity.status(HttpStatus.OK).body(promos);    
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+    }
   }
 
   @GetMapping("/promo_code/{id}")
   public ResponseEntity<PromoCode> getPromoById(Model model, @PathVariable("id") String id) {
-    PromoCode promoCode = promoService.findById(id);
-    return ResponseEntity.status(HttpStatus.OK).body(promoCode);
+    try {
+      PromoCode promoCode = promoService.findById(id).get();
+      return ResponseEntity.status(HttpStatus.OK).body(promoCode);    
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+    }
   }
 
   @PostMapping("/promo_code/add")
   public ResponseEntity<PromoCode> createPromoCodePost(@RequestBody PromoCode promoCode) {
     System.out.println(promoCode);
     try {
-      PromoCode createdPromo = promoService.create(promoCode);
+      PromoCode createdPromo = promoService.create(promoCode).get();
       return ResponseEntity.status(HttpStatus.CREATED).body(createdPromo);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
@@ -101,32 +121,42 @@ public class ManageController {
   @PutMapping("/promo_code/edit/{id}")
   public ResponseEntity<PromoCode> editPromoCodePost(@PathVariable("id") String id, @RequestBody PromoCode promoCode) {
     try {
-      PromoCode editedPromo = promoService.edit(id, promoCode);
+      PromoCode editedPromo = promoService.edit(id, promoCode).get();
       return ResponseEntity.status(HttpStatus.OK).body(editedPromo);
     } catch (NoSuchElementException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
     }
   }
 
   @DeleteMapping("/promo_code/delete/{id}")
   public ResponseEntity<PromoCode> deletePromoCode(@PathVariable("id") String id) {
     try {
-      PromoCode deletedPromo = promoService.delete(id);
+      PromoCode deletedPromo = promoService.delete(id).get();
       return ResponseEntity.status(HttpStatus.OK).body(deletedPromo);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
-    }
+    } 
   }
 
   @GetMapping("/product/top10")
   public ResponseEntity<List<Product>> GetTopTenPage(Model model) {
-    List<Product> products = statisticService.findBestTen();
-    return ResponseEntity.status(HttpStatus.OK).body(products);
+    try {
+      List<Product> products = statisticService.findBestTen().get();
+      return ResponseEntity.status(HttpStatus.OK).body(products);  
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+    }
   }
 
   @GetMapping("/product/worst10")
   public ResponseEntity<List<Product>> GetWorstTenPage(Model model) {
-    List<Product> products = statisticService.findWorstTen();
-    return ResponseEntity.status(HttpStatus.OK).body(products);
+    try {
+      List<Product> products = statisticService.findWorstTen().get();
+      return ResponseEntity.status(HttpStatus.OK).body(products);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+    }
   }
 }

@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -104,7 +105,7 @@ public class ManageControllerTest {
 
   @Test
   void testGetAllProduct() throws Exception {
-    doReturn(products).when(productService).findAll();
+    doReturn(CompletableFuture.completedFuture(products)).when(productService).findAll();
     mockMvc.perform(get("/product/list"))
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
@@ -114,7 +115,7 @@ public class ManageControllerTest {
   @Test
   void testGetProductById() throws Exception {
     Product product = products.getFirst();
-    doReturn(product).when(productService).findById(ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(product)).when(productService).findById(ArgumentMatchers.any());
 
     mockMvc.perform(get("/product/id"))
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -125,7 +126,7 @@ public class ManageControllerTest {
   @Test
   void testCreateProductPost() throws Exception {
     Product product = products.getFirst();
-    doReturn(product).when(productService).create(ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(product)).when(productService).create(ArgumentMatchers.any());
 
     String request = writer.writeValueAsString(product);
     mockMvc.perform(post("/product/add")
@@ -141,7 +142,7 @@ public class ManageControllerTest {
   @Test
   void testEditProductPost() throws Exception {
     Product product = products.getFirst();
-    doReturn(product).when(productService).edit(ArgumentMatchers.any() ,ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(product)).when(productService).edit(ArgumentMatchers.any() ,ArgumentMatchers.any());
 
     String request = writer.writeValueAsString(product);
     mockMvc.perform(put("/product/edit/id")
@@ -157,7 +158,7 @@ public class ManageControllerTest {
   @Test
   void testDeleteProduct() throws Exception {
     Product product = products.getFirst();
-    doReturn(product).when(productService).delete(ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(product)).when(productService).delete(ArgumentMatchers.any());
     
     mockMvc.perform(delete("/product/delete/id"))
       .andExpect(status().isOk());
@@ -168,7 +169,7 @@ public class ManageControllerTest {
 
   @Test
   void testGetAllPromoCode() throws Exception {
-    doReturn(promoCodes).when(promoService).findAll();
+    doReturn(CompletableFuture.completedFuture(promoCodes)).when(promoService).findAll();
 
     mockMvc.perform(get("/promo_code/list"))
       .andExpect(status().isOk())
@@ -179,7 +180,7 @@ public class ManageControllerTest {
   @Test
   void testGetPromoById() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCode).when(promoService).findById(ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(promoCode)).when(promoService).findById(ArgumentMatchers.any());
 
     mockMvc.perform(get("/promo_code/anyid"))
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -190,7 +191,7 @@ public class ManageControllerTest {
   @Test
   void testCreatePromoCodePost() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCode).when(promoService).create(ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(promoCode)).when(promoService).create(ArgumentMatchers.any());
 
     String request = writer.writeValueAsString(promoCode);
     mockMvc.perform(post("/promo_code/add")
@@ -206,7 +207,7 @@ public class ManageControllerTest {
   @Test
   void testEditPromoCodePost() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCode).when(promoService).edit(ArgumentMatchers.any() , ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(promoCode)).when(promoService).edit(ArgumentMatchers.any() , ArgumentMatchers.any());
 
     String request = writer.writeValueAsString(promoCode);
     System.out.println(request);
@@ -222,7 +223,7 @@ public class ManageControllerTest {
   @Test
   void testDeletePromoCode() throws Exception {
     PromoCode promoCode = promoCodes.getFirst();
-    doReturn(promoCode).when(promoService).delete(ArgumentMatchers.any());
+    doReturn(CompletableFuture.completedFuture(promoCode)).when(promoService).delete(ArgumentMatchers.any());
 
     mockMvc.perform(delete("/promo_code/delete/id"))
       .andExpect(status().isOk());
@@ -233,7 +234,7 @@ public class ManageControllerTest {
 
   @Test
   void testGetTopTenPage() throws Exception {
-    doReturn(products).when(statisticService).findBestTen();
+    doReturn(CompletableFuture.completedFuture(products)).when(statisticService).findBestTen();
     mockMvc.perform(get("/product/top10"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].productName", is(products.get(0).getProductName())))
@@ -242,7 +243,7 @@ public class ManageControllerTest {
 
   @Test
   void testGetWorstTenPage() throws Exception {
-    doReturn(products).when(statisticService).findWorstTen();
+    doReturn(CompletableFuture.completedFuture(products)).when(statisticService).findWorstTen();
     mockMvc.perform(get("/product/worst10"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].productName", is(products.get(0).getProductName())))
