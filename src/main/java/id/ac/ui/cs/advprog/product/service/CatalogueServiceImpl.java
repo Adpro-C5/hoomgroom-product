@@ -28,11 +28,95 @@ public class CatalogueServiceImpl implements CatalogueService {
 
     @Override
     public Product findProductDetail(UUID productID) {
-        return null;
+        return repository.findById(productID.toString());
     }
 
     @Override
     public List<Product> showFilteredProduct(String filterType) {
-        return null;
+        List<Product> products = this.findAll();
+        List<Product> filteredProducts = new ArrayList<>();
+        switch (filterType) {
+            case "Chairs":
+                for (Product tempProduct: products) {
+                    ArrayList<String> categories = tempProduct.getCategories();
+                    for (String category : categories) {
+                        if (category.equals("Chairs")) {
+                            filteredProducts.add(tempProduct);
+                            break;
+                        }
+                    }
+                }
+            case "Tables":
+                for (Product tempProduct: products) {
+                    ArrayList<String> categories = tempProduct.getCategories();
+                    for (String category : categories) {
+                        if (category.equals("Tables")) {
+                            filteredProducts.add(tempProduct);
+                            break;
+                        }
+                    }
+                }
+            case "Storage":
+                for (Product tempProduct: products) {
+                    ArrayList<String> categories = tempProduct.getCategories();
+                    for (String category : categories) {
+                        if (category.equals("Storage")) {
+                            filteredProducts.add(tempProduct);
+                            break;
+                        }
+                    }
+                }
+            case "Decoration":
+                for (Product tempProduct: products) {
+                    ArrayList<String> categories = tempProduct.getCategories();
+                    for (String category : categories) {
+                        if (category.equals("Decoration")) {
+                            filteredProducts.add(tempProduct);
+                            break;
+                        }
+                    }
+                }
+            case "Bedding":
+                for (Product tempProduct: products) {
+                    ArrayList<String> categories = tempProduct.getCategories();
+                    for (String category : categories) {
+                        if (category.equals("Bedding")) {
+                            filteredProducts.add(tempProduct);
+                            break;
+                        }
+                    }
+                }
+            case "Minimum price":
+                filteredProducts = products;
+                for (int i = 0; i < filteredProducts.size() - 1; i++) {
+                    int minIdx = i;
+                    for (int j = i + 1; j < filteredProducts.size(); j++) {
+                        if (filteredProducts.get(j).getPrice() < filteredProducts.get(minIdx).getPrice()) {
+                            minIdx = j;
+                        }
+                    }
+
+                    Product temp = filteredProducts.get(minIdx);
+                    Product iProduct = filteredProducts.get(i);
+                    filteredProducts.add(minIdx, iProduct);
+                    filteredProducts.add(i, temp);
+                }
+            case "Maximum price":
+                filteredProducts = products;
+                for (int i = 0; i < filteredProducts.size() - 1; i++) {
+                    int maxIdx = i;
+                    for (int j = i + 1; j < filteredProducts.size(); j++) {
+                        if (filteredProducts.get(j).getPrice() > filteredProducts.get(maxIdx).getPrice()) {
+                            maxIdx = j;
+                        }
+                    }
+
+                    Product temp = filteredProducts.get(maxIdx);
+                    Product iProduct = filteredProducts.get(i);
+                    filteredProducts.add(maxIdx, iProduct);
+                    filteredProducts.add(i, temp);
+                }
+        }
+        return filteredProducts;
     }
 }
