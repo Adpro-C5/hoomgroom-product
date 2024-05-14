@@ -113,12 +113,35 @@ public class ProductRepositoryTest {
   }
 
   @Test
- void testDeleteById() {
+  void testDeleteById() {
     Product product1 = products.get(0);
 
     productRepository.save(product1);
     productRepository.deleteById(product1.getId().toString());
     Iterator<Product> result = productRepository.findAll();
     assertFalse(result.hasNext());
+  }
+
+  @Test
+  void testGetBestTen() {
+    Product product1 = products.getFirst();
+    Product product2 = products.getLast();
+
+    productRepository.save(product1);
+    productRepository.save(product2);
+    Iterator<Product> result = productRepository.getBestTen();
+    assertEquals(result.next().getProductName(), product1.getProductName());
+    assertEquals(result.next().getProductName(), product2.getProductName());
+  }
+
+  void testGetWorstTen() {
+    Product product1 = products.getFirst();
+    Product product2 = products.getLast();
+
+    productRepository.save(product1);
+    productRepository.save(product2);
+    Iterator<Product> result = productRepository.getWorstTen();
+    assertEquals(result.next().getProductName(), product2.getProductName());
+    assertEquals(result.next().getProductName(), product1.getProductName());
   }
 }

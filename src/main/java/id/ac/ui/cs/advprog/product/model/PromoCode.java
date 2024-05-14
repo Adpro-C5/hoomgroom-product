@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import id.ac.ui.cs.advprog.product.enums.AlphaNumeric;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class PromoCode {
+  @Id
   private UUID id;
   private String name;
   private String description;
