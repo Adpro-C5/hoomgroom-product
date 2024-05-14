@@ -27,8 +27,8 @@ public class CatalogueServiceImpl implements CatalogueService {
     }
 
     @Override
-    public Product findProductDetail(UUID productID) {
-        return repository.findById(productID.toString());
+    public Product findProductDetail(String productID) {
+        return repository.findById(productID);
     }
 
     @Override

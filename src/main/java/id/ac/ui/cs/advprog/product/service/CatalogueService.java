@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface CatalogueService {
     List<Product> findAll();
-    Product findProductDetail(UUID productID);
+    Product findProductDetail(String productID);
     List<Product> showFilteredProduct(String filterType);
 }

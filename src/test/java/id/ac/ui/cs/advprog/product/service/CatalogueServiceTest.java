@@ -67,7 +67,7 @@ public class CatalogueServiceTest {
 
         when(productRepository.findById(productId.toString())).thenReturn(products.get(0));
 
-        Product result = catalogueService.findProductDetail(productId);
+        Product result = catalogueService.findProductDetail(productId.toString());
 
         verify(productRepository, times(1)).findById(productId.toString());
         assertEquals(products.get(0), result);
