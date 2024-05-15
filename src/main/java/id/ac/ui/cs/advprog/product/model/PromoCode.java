@@ -5,6 +5,7 @@ import lombok.Setter;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import id.ac.ui.cs.advprog.product.enums.AlphaNumeric;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 public class PromoCode {
   @Id
   private UUID id;
+  @Column(unique = true)
   private String name;
   private String description;
   @JsonFormat(pattern = "yyyy-MM-dd")

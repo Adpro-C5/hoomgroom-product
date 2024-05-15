@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManager;
 
 @Repository
 @Qualifier("promoCodeRepository")
-public class PromoCodeRepository implements ManageRepository<PromoCode> {
+public class PromoCodeRepository implements ManageRepository<PromoCode>, NameFinderRepository {
   
   @Autowired
   EntityManager entityManager;
@@ -48,5 +48,13 @@ public class PromoCodeRepository implements ManageRepository<PromoCode> {
       "SELECT p FROM PromoCode p", 
       PromoCode.class
     ).getResultList().iterator();
+  }
+
+  @Override
+  public PromoCode findByName(String name) {
+    return entityManager.createQuery(
+      "SELECT p FROM PromoCode p WHERE p.name = :name", 
+      PromoCode.class
+    ).setParameter("name", name).getSingleResult();
   }
 }

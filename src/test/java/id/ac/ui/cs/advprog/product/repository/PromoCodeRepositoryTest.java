@@ -111,6 +111,7 @@ public class PromoCodeRepositoryTest {
     assertFalse(result.hasNext());
   }
 
+  @Test
   void testFindByName() {
     PromoCode promoCode1 = promoCodes.getFirst();
     PromoCode promoCode2 = promoCodes.getFirst();
