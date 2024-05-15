@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @Repository
 @Qualifier("productRepository")
-public class ProductRepository implements ManageRepository<Product>, StatisticRepository{
+public class ProductRepository implements ProductRepositoryInterface{
 
   @Autowired
   EntityManager entityManager;

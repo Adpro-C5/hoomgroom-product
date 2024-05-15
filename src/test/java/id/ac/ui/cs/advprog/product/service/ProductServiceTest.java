@@ -114,4 +114,24 @@ public class ProductServiceTest {
     verify(productRepository, times(1)).findAll();
     assertEquals(products.get(0).getId(), result.get(0).getId());
   }
+
+  @Test
+  void testFindBestTen() throws InterruptedException, ExecutionException {
+    doReturn(products.iterator()).when(productRepository).getBestTen();
+
+    List<Product> result = productService.findBestTen().get();
+    verify(productRepository, times(1)).getBestTen();
+    assertEquals(products.getFirst().getSales(), result.getFirst().getSales());
+    assertEquals(products.getLast().getSales(), result.getLast().getSales());
+  }
+
+  @Test
+  void testFindWorstTen() throws InterruptedException, ExecutionException {
+    doReturn(products.reversed().iterator()).when(productRepository).getWorstTen();
+
+    List<Product> result = productService.findWorstTen().get();
+    verify(productRepository, times(1)).getWorstTen();
+    assertEquals(products.getFirst().getSales(), result.getLast().getSales());
+    assertEquals(products.getLast().getSales(), result.getFirst().getSales());
+  }
 }

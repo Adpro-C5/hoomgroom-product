@@ -12,14 +12,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import id.ac.ui.cs.advprog.product.model.Product;
-import id.ac.ui.cs.advprog.product.repository.ManageRepository;
+import id.ac.ui.cs.advprog.product.repository.ProductRepositoryInterface;
 
 @Service
 @Qualifier("productService")
-public class ProductService implements ManageService<Product>{
+public class ProductService implements ProductServiceInterface{
   @Autowired
   @Qualifier("productRepository")
-  private ManageRepository<Product> repository; 
+  private ProductRepositoryInterface repository; 
 
   @Override
   @Async("asyncTaskExecutor")
@@ -69,5 +69,23 @@ public class ProductService implements ManageService<Product>{
     } else {   
       throw new NoSuchElementException("Product doesn't exists");
     } 
+  }
+
+  @Override
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<List<Product>> findBestTen() {
+    Iterator<Product> productIterator = repository.getBestTen();
+    List<Product> products = new ArrayList<Product>();
+    productIterator.forEachRemaining(products::add);
+    return CompletableFuture.completedFuture(products);
+  }
+  
+  @Override
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<List<Product>> findWorstTen() {
+    Iterator<Product> productIterator = repository.getWorstTen();
+    List<Product> products = new ArrayList<Product>();
+    productIterator.forEachRemaining(products::add);
+    return CompletableFuture.completedFuture(products);
   }
 }
