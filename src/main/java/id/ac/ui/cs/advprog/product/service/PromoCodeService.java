@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @Qualifier("promoCodeService")
-public class PromoCodeService implements ManageService<PromoCode> {
+public class PromoCodeService implements PromoServiceInterface {
   
   @Autowired
   @Qualifier("promoCodeRepository")
@@ -86,6 +86,7 @@ public class PromoCodeService implements ManageService<PromoCode> {
     return true;
   }
 
+  @Override
   @Async("asyncTaskExecutor")
   public CompletableFuture<PromoCode> findByName(String name) throws NoSuchElementException {
     return CompletableFuture.completedFuture(repository.findByName(name));

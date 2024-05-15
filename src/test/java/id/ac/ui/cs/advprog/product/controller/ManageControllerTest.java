@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.product.controller;
 import id.ac.ui.cs.advprog.product.service.ManageService;
+import id.ac.ui.cs.advprog.product.service.PromoServiceInterface;
 import id.ac.ui.cs.advprog.product.service.StatsisticService;
 import id.ac.ui.cs.advprog.product.model.Product;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
@@ -53,7 +54,7 @@ public class ManageControllerTest {
 
   @MockBean
   @Qualifier("promoCodeService")
-  ManageService<PromoCode> promoService;
+  PromoServiceInterface promoService;
 
   @MockBean
   StatsisticService statisticService;
@@ -183,6 +184,17 @@ public class ManageControllerTest {
     doReturn(CompletableFuture.completedFuture(promoCode)).when(promoService).findById(ArgumentMatchers.any());
 
     mockMvc.perform(get("/promo_code/anyid"))
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.name", is(promoCode.getName())));
+  }
+
+  @Test
+  void testGetPromoByName() throws Exception {
+    PromoCode promoCode = promoCodes.getFirst();
+    doReturn(CompletableFuture.completedFuture(promoCode)).when(promoService).findByName(ArgumentMatchers.any());
+
+    mockMvc.perform(get("/promo_code/name/anyid"))
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.name", is(promoCode.getName())));
