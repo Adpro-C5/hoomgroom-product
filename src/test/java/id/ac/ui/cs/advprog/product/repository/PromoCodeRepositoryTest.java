@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.product.repository;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
+import jakarta.transaction.Transactional;
 
 import java.util.UUID;
 
@@ -12,14 +13,22 @@ import java.util.List;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@ExtendWith(MockitoExtension.class)
+@Transactional
+@SpringBootTest
 public class PromoCodeRepositoryTest {
+  @Autowired
   PromoCodeRepository promoCodeRepository;
+  
   List<PromoCode> promoCodes;
 
   @BeforeEach
   void setUp() throws Exception {
-    promoCodeRepository = new PromoCodeRepository();
     PromoCode promoCode1 = new PromoCode();
     UUID id = UUID.randomUUID();
     promoCode1.setId(id);

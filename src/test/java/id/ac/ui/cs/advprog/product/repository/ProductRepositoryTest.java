@@ -1,25 +1,30 @@
 package id.ac.ui.cs.advprog.product.repository;
 import id.ac.ui.cs.advprog.product.model.Product;
-
+import jakarta.transaction.Transactional;
 import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@ExtendWith(MockitoExtension.class)
+@Transactional
+@SpringBootTest
 public class ProductRepositoryTest {
+  @Autowired
   ProductRepository productRepository;
-  List<Product> products;
 
+  List<Product> products;
+  
   @BeforeEach
   void setUp() {
-    productRepository = new ProductRepository();
     Product product1 = new Product();
     UUID id = UUID.randomUUID();
     product1.setId(id);
@@ -91,7 +96,6 @@ public class ProductRepositoryTest {
   void testFindAll() {
     Product product1 = products.get(0);
     Product product2 = products.get(1);
-    
     productRepository.save(product1);
     productRepository.save(product2);
 
@@ -104,7 +108,6 @@ public class ProductRepositoryTest {
   void testFindById() {
     Product product1 = products.get(0);
     Product product2 = products.get(1);
-
     productRepository.save(product1);
     productRepository.save(product2);
 
@@ -115,7 +118,6 @@ public class ProductRepositoryTest {
   @Test
   void testDeleteById() {
     Product product1 = products.get(0);
-
     productRepository.save(product1);
     productRepository.deleteById(product1.getId().toString());
     Iterator<Product> result = productRepository.findAll();
@@ -126,7 +128,6 @@ public class ProductRepositoryTest {
   void testGetBestTen() {
     Product product1 = products.getFirst();
     Product product2 = products.getLast();
-
     productRepository.save(product1);
     productRepository.save(product2);
     Iterator<Product> result = productRepository.getBestTen();
@@ -134,10 +135,10 @@ public class ProductRepositoryTest {
     assertEquals(result.next().getProductName(), product2.getProductName());
   }
 
+  @Test
   void testGetWorstTen() {
     Product product1 = products.getFirst();
     Product product2 = products.getLast();
-
     productRepository.save(product1);
     productRepository.save(product2);
     Iterator<Product> result = productRepository.getWorstTen();
