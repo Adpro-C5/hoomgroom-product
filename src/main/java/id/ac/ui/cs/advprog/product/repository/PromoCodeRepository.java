@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 @Repository
 @Qualifier("promoCodeRepository")
@@ -15,6 +16,7 @@ public class PromoCodeRepository implements PromoCodeRepositoryInterface {
   EntityManager entityManager;
 
   @Override
+  @Transactional
   public PromoCode save(PromoCode promoCode) {
     if (findById(promoCode.getId().toString()) == null) {
       entityManager.persist(promoCode);
@@ -26,12 +28,14 @@ public class PromoCodeRepository implements PromoCodeRepositoryInterface {
   }
 
   @Override
+  @Transactional
   public PromoCode findById(String id) {
     UUID uuid = UUID.fromString(id);
     return entityManager.find(PromoCode.class, uuid);
   }
 
   @Override
+  @Transactional
   public PromoCode deleteById(String id) {
     PromoCode promoCode = findById(id);
     if (promoCode != null) {
@@ -43,6 +47,7 @@ public class PromoCodeRepository implements PromoCodeRepositoryInterface {
   }
 
   @Override
+  @Transactional
   public Iterator<PromoCode> findAll() {
     return entityManager.createQuery(
       "SELECT p FROM PromoCode p", 
@@ -51,6 +56,7 @@ public class PromoCodeRepository implements PromoCodeRepositoryInterface {
   }
 
   @Override
+  @Transactional
   public PromoCode findByName(String name) {
     return entityManager.createQuery(
       "SELECT p FROM PromoCode p WHERE p.name = :name", 
