@@ -102,12 +102,21 @@ public class PromoCodeRepositoryTest {
   }
 
   @Test
- void testDeleteById() {
+  void testDeleteById() {
     PromoCode promoCode = promoCodes.getFirst();
 
     promoCodeRepository.save(promoCode);
     promoCodeRepository.deleteById(promoCode.getId().toString());
     Iterator<PromoCode> result = promoCodeRepository.findAll();
     assertFalse(result.hasNext());
+  }
+
+  void testFindByName() {
+    PromoCode promoCode1 = promoCodes.getFirst();
+    PromoCode promoCode2 = promoCodes.getFirst();
+    promoCodeRepository.save(promoCode1);
+    promoCodeRepository.save(promoCode2);
+    PromoCode result = promoCodeRepository.findByName(promoCode2.getName());
+    assertEquals(promoCode2, result);
   }
 }
