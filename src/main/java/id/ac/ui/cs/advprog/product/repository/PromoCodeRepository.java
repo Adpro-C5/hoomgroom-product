@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManager;
 
 @Repository
 @Qualifier("promoCodeRepository")
-public class PromoCodeRepository implements ManageRepository<PromoCode>, NameFinderRepository {
+public class PromoCodeRepository implements PromoCodeRepositoryInterface {
   
   @Autowired
   EntityManager entityManager;

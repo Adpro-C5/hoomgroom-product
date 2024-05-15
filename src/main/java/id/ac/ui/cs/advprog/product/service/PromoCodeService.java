@@ -6,7 +6,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import id.ac.ui.cs.advprog.product.model.PromoCode;
-import id.ac.ui.cs.advprog.product.repository.ManageRepository;
+import id.ac.ui.cs.advprog.product.repository.PromoCodeRepositoryInterface;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,7 +20,7 @@ public class PromoCodeService implements ManageService<PromoCode> {
   
   @Autowired
   @Qualifier("promoCodeRepository")
-  ManageRepository<PromoCode> repository;
+  PromoCodeRepositoryInterface repository;
 
   @Override
   @Async("asyncTaskExecutor")
@@ -83,5 +84,10 @@ public class PromoCodeService implements ManageService<PromoCode> {
       }
     }
     return true;
+  }
+
+  @Async("asyncTaskExecutor")
+  public CompletableFuture<PromoCode> findByName(String name) throws NoSuchElementException {
+    return CompletableFuture.completedFuture(repository.findByName(name));
   }
 }
