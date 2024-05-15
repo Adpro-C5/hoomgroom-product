@@ -154,4 +154,17 @@ public class PromoCodeServiceTest {
     assertEquals(promoCodes.getFirst().getId(), result.getFirst().getId());
     assertEquals(promoCodes.getLast().getId(), result.getLast().getId());
   }
+
+  @Test
+  void testFindByName() throws InterruptedException, ExecutionException {
+    PromoCode promoCode = promoCodes.getFirst();
+    doReturn(promoCode).when(promoCodeRepository)
+      .findByName(promoCode.getName());
+
+    PromoCode result = promoCodeService
+      .findByName(promoCode.getName()).get();
+    verify(promoCodeRepository, times(1))
+      .findByName(promoCode.getName());
+    assertEquals(promoCode.getId(), result.getId());
+  }
 }
