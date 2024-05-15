@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.ui.Model;
 import id.ac.ui.cs.advprog.product.model.Product;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
-import id.ac.ui.cs.advprog.product.service.ManageService;
+import id.ac.ui.cs.advprog.product.service.ProductServiceInterface;
 import id.ac.ui.cs.advprog.product.service.PromoServiceInterface;
-import id.ac.ui.cs.advprog.product.service.StatsisticService;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,15 +24,12 @@ public class ManageController {
 
   @Autowired
   @Qualifier("productService")
-  ManageService<Product> productService;
+  ProductServiceInterface productService;
 
   @Autowired
   @Qualifier("promoCodeService")
   PromoServiceInterface promoService;
 
-  @Autowired
-  StatsisticService statisticService;
-  
   @GetMapping("/product/list")
   public ResponseEntity<List<Product>> getProductPage() {
     try {
@@ -154,7 +150,7 @@ public class ManageController {
   @GetMapping("/product/top10")
   public ResponseEntity<List<Product>> GetTopTenPage(Model model) {
     try {
-      List<Product> products = statisticService.findBestTen().get();
+      List<Product> products = productService.findBestTen().get();
       return ResponseEntity.status(HttpStatus.OK).body(products);  
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
@@ -164,7 +160,7 @@ public class ManageController {
   @GetMapping("/product/worst10")
   public ResponseEntity<List<Product>> GetWorstTenPage(Model model) {
     try {
-      List<Product> products = statisticService.findWorstTen().get();
+      List<Product> products = productService.findWorstTen().get();
       return ResponseEntity.status(HttpStatus.OK).body(products);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);

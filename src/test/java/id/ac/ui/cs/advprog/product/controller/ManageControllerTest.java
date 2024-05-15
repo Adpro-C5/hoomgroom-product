@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.product.controller;
-import id.ac.ui.cs.advprog.product.service.ManageService;
+import id.ac.ui.cs.advprog.product.service.ProductServiceInterface;
 import id.ac.ui.cs.advprog.product.service.PromoServiceInterface;
-import id.ac.ui.cs.advprog.product.service.StatsisticService;
 import id.ac.ui.cs.advprog.product.model.Product;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
 
@@ -50,14 +49,11 @@ public class ManageControllerTest {
 
   @MockBean
   @Qualifier("productService")
-  ManageService<Product> productService;
+  ProductServiceInterface productService;
 
   @MockBean
   @Qualifier("promoCodeService")
   PromoServiceInterface promoService;
-
-  @MockBean
-  StatsisticService statisticService;
 
   List<Product> products;
   List<PromoCode> promoCodes;
@@ -246,7 +242,7 @@ public class ManageControllerTest {
 
   @Test
   void testGetTopTenPage() throws Exception {
-    doReturn(CompletableFuture.completedFuture(products)).when(statisticService).findBestTen();
+    doReturn(CompletableFuture.completedFuture(products)).when(productService).findBestTen();
     mockMvc.perform(get("/product/top10"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].productName", is(products.get(0).getProductName())))
@@ -255,7 +251,7 @@ public class ManageControllerTest {
 
   @Test
   void testGetWorstTenPage() throws Exception {
-    doReturn(CompletableFuture.completedFuture(products)).when(statisticService).findWorstTen();
+    doReturn(CompletableFuture.completedFuture(products)).when(productService).findWorstTen();
     mockMvc.perform(get("/product/worst10"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$[0].productName", is(products.get(0).getProductName())))
