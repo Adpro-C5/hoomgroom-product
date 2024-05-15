@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import id.ac.ui.cs.advprog.product.model.Product;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
 import id.ac.ui.cs.advprog.product.service.ManageService;
+import id.ac.ui.cs.advprog.product.service.PromoServiceInterface;
 import id.ac.ui.cs.advprog.product.service.StatsisticService;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,7 +29,7 @@ public class ManageController {
 
   @Autowired
   @Qualifier("promoCodeService")
-  ManageService<PromoCode> promoService;
+  PromoServiceInterface promoService;
 
   @Autowired
   StatsisticService statisticService;
@@ -101,6 +102,16 @@ public class ManageController {
   public ResponseEntity<PromoCode> getPromoById(Model model, @PathVariable("id") String id) {
     try {
       PromoCode promoCode = promoService.findById(id).get();
+      return ResponseEntity.status(HttpStatus.OK).body(promoCode);    
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+    }
+  }
+
+  @GetMapping("/promo_code/name/{name}")
+  public ResponseEntity<PromoCode> getPromoByName(Model model, @PathVariable("name") String name) {
+    try {
+      PromoCode promoCode = promoService.findByName(name).get();
       return ResponseEntity.status(HttpStatus.OK).body(promoCode);    
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
