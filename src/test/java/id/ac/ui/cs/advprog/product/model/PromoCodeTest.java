@@ -8,8 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 import java.time.LocalDate;
+import org.springframework.test.context.ActiveProfiles;
 
-
+@ActiveProfiles("test")
 public class PromoCodeTest {
   
   PromoCode promoCode;
