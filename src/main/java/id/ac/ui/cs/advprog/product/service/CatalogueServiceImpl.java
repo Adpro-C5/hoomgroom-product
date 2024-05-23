@@ -5,11 +5,12 @@ import id.ac.ui.cs.advprog.product.model.Product;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import id.ac.ui.cs.advprog.product.repository.ManageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,12 +28,14 @@ public class CatalogueServiceImpl implements CatalogueService {
     }
 
     @Override
-    public Product findProductDetail(String productID) {
-        return repository.findById(productID);
+    @Async("asyncTaskExecutor")
+    public CompletableFuture<Product> findProductDetail(String productID) {
+        return CompletableFuture.completedFuture(repository.findById(productID));
     }
 
     @Override
-    public List<Product> showFilteredProduct(String filterType) {
+    @Async("asyncTaskExecutor")
+    public CompletableFuture<List<Product>> showFilteredProduct(String filterType) {
         List<Product> products = this.findAll();
         List<Product> filteredProducts = new ArrayList<>();
         switch (filterType) {
@@ -124,6 +127,6 @@ public class CatalogueServiceImpl implements CatalogueService {
                 }
                 break;
         }
-        return filteredProducts;
+        return CompletableFuture.completedFuture(filteredProducts);
     }
 }

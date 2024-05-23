@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -46,7 +47,7 @@ public class CatalogueControllerTest {
     void testProductDetailPage() {
         String productId = "123";
         Product product = new Product(); // Add dummy product
-        when(catalogueService.findProductDetail(productId)).thenReturn(product);
+        when(catalogueService.findProductDetail(productId)).thenReturn(CompletableFuture.completedFuture(product));
 
         ResponseEntity<Product> response = catalogueController.productDetailPage(productId);
 
@@ -70,7 +71,7 @@ public class CatalogueControllerTest {
         List<Product> products = new ArrayList<>();
         products.add(new Product()); // Add dummy product
 
-        when(catalogueService.showFilteredProduct(filterType)).thenReturn(products);
+        when(catalogueService.showFilteredProduct(filterType)).thenReturn(CompletableFuture.completedFuture(products));
 
         ResponseEntity<List<Product>> response = catalogueController.productFilteredPage(filterType);
 

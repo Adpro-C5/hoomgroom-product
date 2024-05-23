@@ -4,9 +4,10 @@ import id.ac.ui.cs.advprog.product.model.Product;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public interface CatalogueService {
     List<Product> findAll();
-    Product findProductDetail(String productID);
-    List<Product> showFilteredProduct(String filterType);
+    CompletableFuture<Product> findProductDetail(String productID);
+    CompletableFuture<List<Product>> showFilteredProduct(String filterType);
 }

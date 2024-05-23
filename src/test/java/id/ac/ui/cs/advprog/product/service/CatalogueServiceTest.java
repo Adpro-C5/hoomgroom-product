@@ -62,24 +62,24 @@ public class CatalogueServiceTest {
     }
 
     @Test
-    void testFindProductDetail() {
+    void testFindProductDetail() throws Exception {
         UUID productId = products.get(0).getId();
 
         when(productRepository.findById(productId.toString())).thenReturn(products.get(0));
 
-        Product result = catalogueService.findProductDetail(productId.toString());
+        Product result = catalogueService.findProductDetail(productId.toString()).get();
 
         verify(productRepository, times(1)).findById(productId.toString());
         assertEquals(products.get(0), result);
     }
 
     @Test
-    void testShowFilteredProduct() {
+    void testShowFilteredProduct() throws Exception {
         String filterType = "Chairs";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
-        List<Product> filteredProducts = catalogueService.showFilteredProduct(filterType);
+        List<Product> filteredProducts = catalogueService.showFilteredProduct(filterType).get();
 
         verify(productRepository, times(1)).findAll();
 
