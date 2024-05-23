@@ -46,6 +46,7 @@ public class CatalogueServiceImpl implements CatalogueService {
                         }
                     }
                 }
+                break;
             case "Tables":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
@@ -56,6 +57,7 @@ public class CatalogueServiceImpl implements CatalogueService {
                         }
                     }
                 }
+                break;
             case "Storage":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
@@ -66,6 +68,7 @@ public class CatalogueServiceImpl implements CatalogueService {
                         }
                     }
                 }
+                break;
             case "Decoration":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
@@ -76,6 +79,7 @@ public class CatalogueServiceImpl implements CatalogueService {
                         }
                     }
                 }
+                break;
             case "Bedding":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
@@ -86,6 +90,7 @@ public class CatalogueServiceImpl implements CatalogueService {
                         }
                     }
                 }
+                break;
             case "Minimum price":
                 filteredProducts = products;
                 for (int i = 0; i < filteredProducts.size() - 1; i++) {
@@ -101,6 +106,7 @@ public class CatalogueServiceImpl implements CatalogueService {
                     filteredProducts.add(minIdx, iProduct);
                     filteredProducts.add(i, temp);
                 }
+                break;
             case "Maximum price":
                 filteredProducts = products;
                 for (int i = 0; i < filteredProducts.size() - 1; i++) {
@@ -116,6 +122,7 @@ public class CatalogueServiceImpl implements CatalogueService {
                     filteredProducts.add(maxIdx, iProduct);
                     filteredProducts.add(i, temp);
                 }
+                break;
         }
         return filteredProducts;
     }
