@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class CatalogueServiceTest {
     @InjectMocks
-    CatalogueService catalogueService;
+    CatalogueServiceImpl catalogueService;
 
     @Mock
     ProductRepository productRepository;
@@ -31,7 +31,7 @@ public class CatalogueServiceTest {
         Product product1 = new Product();
         UUID id = UUID.randomUUID();
         ArrayList<String> productCategories1 = new ArrayList<>();
-        productCategories1.add("Kursi");
+        productCategories1.add("Chairs");
         product1.setId(id);
         product1.setProductName("Kursi Mewah");
         product1.setCategories(productCategories1);
@@ -75,7 +75,7 @@ public class CatalogueServiceTest {
 
     @Test
     void testShowFilteredProduct() {
-        String filterType = "Kursi";
+        String filterType = "Chairs";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -85,6 +85,6 @@ public class CatalogueServiceTest {
 
         assertEquals(1, filteredProducts.size());
         assertEquals("Kursi Mewah", filteredProducts.get(0).getProductName());
-        assertEquals("Kursi", filteredProducts.get(0).getCategories().get(0));
+        assertEquals("Chairs", filteredProducts.get(0).getCategories().get(0));
     }
 }
