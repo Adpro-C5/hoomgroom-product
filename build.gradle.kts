@@ -19,6 +19,8 @@ configurations {
     }
 }
 
+System.setProperty("sonar.gradle.skipCompile", "true")
+
 repositories {
     mavenCentral()
 }
