@@ -8,8 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 import java.time.LocalDate;
+import org.springframework.test.context.ActiveProfiles;
 
-
+@ActiveProfiles("test")
 public class PromoCodeTest {
   
   PromoCode promoCode;
@@ -74,7 +75,7 @@ public class PromoCodeTest {
     @Test
     void testSetExpiredDateIfValid() {
         promoCode.setExpiredDate(LocalDate
-            .of(2050, 12, 12));
+            .of(2030, 12, 12));
         assertEquals(LocalDate.of(2030, 12, 12)
             , promoCode.getExpiredDate());
     }
