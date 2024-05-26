@@ -1,61 +1,78 @@
 package id.ac.ui.cs.advprog.product.repository;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.UUID;
 import java.util.Iterator;
 import id.ac.ui.cs.advprog.product.model.Product;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @Repository
 @Qualifier("productRepository")
-public class ProductRepository implements ManageRepository<Product>{
-  private List<Product> productData = new ArrayList<Product>();
+public class ProductRepository implements ProductRepositoryInterface{
+
+  @Autowired
+  EntityManager entityManager;
 
   @Override
+  @Transactional
   public Product save(Product product) {
-    int index = 0;
-    for (Product savedProduct : productData) {
-      if (savedProduct.getId().equals(product.getId())) {
-        productData.remove(index);
-        productData.add(index, product);
-        return product;
-      }
-      index += 1;
+    if (findById(product.getId().toString()) == null) {
+      entityManager.persist(product);
+      return product;
+    } else {
+      entityManager.merge(product);
+      return product;
     }
-    productData.add(product);
-    return product;
   }
 
   @Override
+  @Transactional
   public Product findById(String id) {
-    for (Product savedProduct : productData) {
-      if (id.equals(savedProduct.getId().toString())) {
-        return savedProduct;
-      }
-    }
-
-    return null;
+    UUID uuid = UUID.fromString(id);
+    return entityManager.find(Product.class, uuid);
   }
 
   @Override
+  @Transactional
   public Product deleteById(String id) {
-    int index = 0;
-    for (Product savedProduct : productData) {
-      if (id.equals(savedProduct.getId().toString())) {
-        productData.remove(index);
-        return savedProduct;
-      }
-
-      index += 1;
+    Product product = findById(id);
+    if (product != null) {
+      entityManager.remove(product);
+      return product;
+    } else {
+      return null;
     }
-
-    return null;
   }
 
   @Override
+  @Transactional
   public Iterator<Product> findAll() {
-    return productData.iterator();
+    return entityManager.createQuery(
+      "SELECT p FROM Product p", 
+      Product.class
+    ).getResultList().iterator();
+  }
+
+  @Override
+  @Transactional
+  public Iterator<Product> getBestTen() {
+    return entityManager.createQuery(
+      "SELECT p FROM Product p ORDER BY p.sales DESC LIMIT 10", 
+      Product.class
+    ).getResultList().iterator();
+  }
+
+  @Override
+  @Transactional
+  public Iterator<Product> getWorstTen() {
+    return entityManager.createQuery(
+      "SELECT p FROM Product p ORDER BY p.sales ASC LIMIT 10", 
+      Product.class
+    ).getResultList().iterator();
   }
 }
 
