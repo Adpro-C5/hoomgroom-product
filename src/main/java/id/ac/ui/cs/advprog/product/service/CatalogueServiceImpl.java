@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import id.ac.ui.cs.advprog.product.repository.ManageRepository;
+import id.ac.ui.cs.advprog.product.repository.ProductRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
@@ -16,7 +17,7 @@ public class CatalogueServiceImpl implements CatalogueService {
 
     @Autowired
     @Qualifier("productRepository")
-    ManageRepository<Product> repository;
+    ProductRepositoryInterface repository;
     @Override
     public List<Product> findAll() {
         Iterator<Product> productIterator = repository.findAll();
@@ -37,69 +38,71 @@ public class CatalogueServiceImpl implements CatalogueService {
         List<Product> products = this.findAll();
         List<Product> filteredProducts = new ArrayList<>();
         switch (filterType) {
-            case "Chairs":
+            case "Kursi":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
                     for (String category : categories) {
-                        if (category.equals("Chairs")) {
+                        if (category.equals("Kursi")) {
                             filteredProducts.add(tempProduct);
                             break;
                         }
                     }
                 }
                 break;
-            case "Tables":
+            case "Meja":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
                     for (String category : categories) {
-                        if (category.equals("Tables")) {
+                        if (category.equals("Meja")) {
                             filteredProducts.add(tempProduct);
                             break;
                         }
                     }
                 }
                 break;
-            case "Storage":
+            case "Penyimpanan":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
                     for (String category : categories) {
-                        if (category.equals("Storage")) {
+                        if (category.equals("Penyimpanan")) {
                             filteredProducts.add(tempProduct);
                             break;
                         }
                     }
                 }
                 break;
-            case "Decoration":
+            case "Dekorasi":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
                     for (String category : categories) {
-                        if (category.equals("Decoration")) {
+                        if (category.equals("Dekorasi")) {
                             filteredProducts.add(tempProduct);
                             break;
                         }
                     }
                 }
                 break;
-            case "Bedding":
+            case "Ranjang":
                 for (Product tempProduct: products) {
                     ArrayList<String> categories = tempProduct.getCategories();
                     for (String category : categories) {
-                        if (category.equals("Bedding")) {
+                        if (category.equals("Ranjang")) {
                             filteredProducts.add(tempProduct);
                             break;
                         }
                     }
                 }
                 break;
-            case "Minimum price":
+            case "Harga Minimal":
                 filteredProducts.addAll(products);
                 Collections.sort(filteredProducts, (p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
                 break;
-            case "Maximum price":
+            case "Harga Maksimal":
                 filteredProducts.addAll(products);
                 Collections.sort(filteredProducts, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
                 break;
+            default:
+                filteredProducts = products;
         }
         return CompletableFuture.completedFuture(filteredProducts);
     }
