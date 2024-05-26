@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,13 +18,13 @@ public class CatalogueController {
     @Autowired
     CatalogueService catalogueService;
 
-    @PostMapping("/product/catalogue")
+    @GetMapping("/product/catalogue")
     public ResponseEntity<List<Product>> productCataloguePage() {
         List<Product> allProducts = catalogueService.findAll();
         return new ResponseEntity<>(allProducts, HttpStatus.OK);
     }
 
-    @PostMapping("/product/details/{productId}")
+    @GetMapping("/product/details/{productId}")
     public ResponseEntity<Product> productDetailPage(@PathVariable("productId") String productId) {
         try {
             CompletableFuture<Product> product = catalogueService.findProductDetail(productId);
@@ -38,7 +38,7 @@ public class CatalogueController {
         }
     }
 
-    @PostMapping("/product/{filterType}/")
+    @GetMapping("/product/{filterType}/")
     public ResponseEntity<List<Product>> productFilteredPage(@PathVariable("filterType") String filterType) {
         try {
             List<Product> filteredProducts = catalogueService.showFilteredProduct(filterType).get();
