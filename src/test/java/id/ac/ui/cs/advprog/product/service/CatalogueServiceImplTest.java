@@ -31,7 +31,7 @@ public class CatalogueServiceImplTest {
         Product product1 = new Product();
         UUID id = UUID.randomUUID();
         ArrayList<String> productCategories1 = new ArrayList<>();
-        productCategories1.add("Chairs");
+        productCategories1.add("Kursi");
         product1.setId(id);
         product1.setProductName("Kursi Mewah");
         product1.setPrice(1200000.00);
@@ -41,7 +41,7 @@ public class CatalogueServiceImplTest {
         Product product2 = new Product();
         UUID id2 = UUID.randomUUID();
         ArrayList<String> productCategories2 = new ArrayList<>();
-        productCategories2.add("Tables");
+        productCategories2.add("Meja");
         product2.setId(id2);
         product2.setProductName("Meja Mewah");
         product2.setPrice(1100000.00);
@@ -51,7 +51,7 @@ public class CatalogueServiceImplTest {
         Product product3 = new Product();
         UUID id3 = UUID.randomUUID();
         ArrayList<String> productCategories3 = new ArrayList<>();
-        productCategories3.add("Storage");
+        productCategories3.add("Penyimpanan");
         product3.setId(id3);
         product3.setProductName("Lemari Mewah");
         product3.setPrice(1000000.00);
@@ -61,7 +61,7 @@ public class CatalogueServiceImplTest {
         Product product4 = new Product();
         UUID id4 = UUID.randomUUID();
         ArrayList<String> productCategories4 = new ArrayList<>();
-        productCategories4.add("Decoration");
+        productCategories4.add("Dekorasi");
         product4.setId(id4);
         product4.setProductName("Vas Bunga");
         product4.setPrice(900000.00);
@@ -71,7 +71,7 @@ public class CatalogueServiceImplTest {
         Product product5 = new Product();
         UUID id5 = UUID.randomUUID();
         ArrayList<String> productCategories5 = new ArrayList<>();
-        productCategories5.add("Bedding");
+        productCategories5.add("Ranjang");
         product5.setId(id5);
         product5.setProductName("Sprei Mewah");
         product5.setPrice(800000.00);
@@ -185,7 +185,7 @@ public class CatalogueServiceImplTest {
 
     @Test
     void testShowFilteredProductMinimumPrice() throws Exception {
-        String filterType = "Minimum price";
+        String filterType = "Harga Minimal";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -203,7 +203,7 @@ public class CatalogueServiceImplTest {
 
     @Test
     void testShowFilteredProductMaximumPrice() throws Exception {
-        String filterType = "Maximum price";
+        String filterType = "Harga Maksimal";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
