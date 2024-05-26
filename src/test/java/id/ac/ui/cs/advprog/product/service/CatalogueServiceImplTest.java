@@ -110,7 +110,7 @@ public class CatalogueServiceImplTest {
 
     @Test
     void testShowFilteredProductChairs() throws Exception {
-        String filterType = "Chairs";
+        String filterType = "Kursi";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -120,12 +120,12 @@ public class CatalogueServiceImplTest {
 
         assertEquals(1, filteredProducts.size());
         assertEquals("Kursi Mewah", filteredProducts.get(0).getProductName());
-        assertEquals("Chairs", filteredProducts.get(0).getCategories().get(0));
+        assertEquals("Kursi", filteredProducts.get(0).getCategories().get(0));
     }
 
     @Test
     void testShowFilteredProductTables() throws Exception {
-        String filterType = "Tables";
+        String filterType = "Meja";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -135,12 +135,12 @@ public class CatalogueServiceImplTest {
 
         assertEquals(1, filteredProducts.size());
         assertEquals("Meja Mewah", filteredProducts.get(0).getProductName());
-        assertEquals("Tables", filteredProducts.get(0).getCategories().get(0));
+        assertEquals("Meja", filteredProducts.get(0).getCategories().get(0));
     }
 
     @Test
     void testShowFilteredProductStorage() throws Exception {
-        String filterType = "Storage";
+        String filterType = "Penyimpanan";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -150,12 +150,12 @@ public class CatalogueServiceImplTest {
 
         assertEquals(1, filteredProducts.size());
         assertEquals("Lemari Mewah", filteredProducts.get(0).getProductName());
-        assertEquals("Storage", filteredProducts.get(0).getCategories().get(0));
+        assertEquals("Penyimpanan", filteredProducts.get(0).getCategories().get(0));
     }
 
     @Test
     void testShowFilteredProductDecoration() throws Exception {
-        String filterType = "Decoration";
+        String filterType = "Dekorasi";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -165,12 +165,12 @@ public class CatalogueServiceImplTest {
 
         assertEquals(1, filteredProducts.size());
         assertEquals("Vas Bunga", filteredProducts.get(0).getProductName());
-        assertEquals("Decoration", filteredProducts.get(0).getCategories().get(0));
+        assertEquals("Dekorasi", filteredProducts.get(0).getCategories().get(0));
     }
 
     @Test
     void testShowFilteredProductBedding() throws Exception {
-        String filterType = "Bedding";
+        String filterType = "Ranjang";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -180,7 +180,7 @@ public class CatalogueServiceImplTest {
 
         assertEquals(1, filteredProducts.size());
         assertEquals("Sprei Mewah", filteredProducts.get(0).getProductName());
-        assertEquals("Bedding", filteredProducts.get(0).getCategories().get(0));
+        assertEquals("Ranjang", filteredProducts.get(0).getCategories().get(0));
     }
 
     @Test
