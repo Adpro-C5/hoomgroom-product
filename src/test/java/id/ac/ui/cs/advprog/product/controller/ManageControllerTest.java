@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
 @WebMvcTest(ManageController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
