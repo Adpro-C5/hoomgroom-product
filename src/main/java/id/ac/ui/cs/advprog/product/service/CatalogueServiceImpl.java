@@ -2,9 +2,7 @@ package id.ac.ui.cs.advprog.product.service;
 
 import id.ac.ui.cs.advprog.product.model.Product;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import id.ac.ui.cs.advprog.product.repository.ManageRepository;
@@ -95,36 +93,12 @@ public class CatalogueServiceImpl implements CatalogueService {
                 }
                 break;
             case "Minimum price":
-                filteredProducts = products;
-                for (int i = 0; i < filteredProducts.size() - 1; i++) {
-                    int minIdx = i;
-                    for (int j = i + 1; j < filteredProducts.size(); j++) {
-                        if (filteredProducts.get(j).getPrice() < filteredProducts.get(minIdx).getPrice()) {
-                            minIdx = j;
-                        }
-                    }
-
-                    Product temp = filteredProducts.get(minIdx);
-                    Product iProduct = filteredProducts.get(i);
-                    filteredProducts.add(minIdx, iProduct);
-                    filteredProducts.add(i, temp);
-                }
+                filteredProducts.addAll(products);
+                Collections.sort(filteredProducts, (p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
                 break;
             case "Maximum price":
-                filteredProducts = products;
-                for (int i = 0; i < filteredProducts.size() - 1; i++) {
-                    int maxIdx = i;
-                    for (int j = i + 1; j < filteredProducts.size(); j++) {
-                        if (filteredProducts.get(j).getPrice() > filteredProducts.get(maxIdx).getPrice()) {
-                            maxIdx = j;
-                        }
-                    }
-
-                    Product temp = filteredProducts.get(maxIdx);
-                    Product iProduct = filteredProducts.get(i);
-                    filteredProducts.add(maxIdx, iProduct);
-                    filteredProducts.add(i, temp);
-                }
+                filteredProducts.addAll(products);
+                Collections.sort(filteredProducts, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
                 break;
         }
         return CompletableFuture.completedFuture(filteredProducts);
