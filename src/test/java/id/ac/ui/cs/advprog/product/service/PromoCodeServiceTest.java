@@ -10,16 +10,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import id.ac.ui.cs.advprog.product.repository.PromoCodeRepository;
 import id.ac.ui.cs.advprog.product.model.PromoCode;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.time.LocalDate;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,7 +63,7 @@ public class PromoCodeServiceTest {
       .when(promoCodeRepository).findAll();
     doReturn(promoCode).when(promoCodeRepository).save(promoCode);
 
-    PromoCode result = promoCodeService.create(promoCode);
+    PromoCode result = promoCodeService.create(promoCode).get();
     verify(promoCodeRepository, times(1)).save(promoCode);
     assertEquals(promoCode.getId(), result.getId());
   }
@@ -74,13 +75,13 @@ public class PromoCodeServiceTest {
     doReturn(promoCodes.iterator()).when(promoCodeRepository).findAll();
 
     assertThrows(Exception.class, () -> {
-      PromoCode result = promoCodeService.create(promoCode);
+    promoCodeService.create(promoCode);
     });
     verify(promoCodeRepository, times(0)).save(promoCode);
   }
 
   @Test
-  void testEditProductIfValid() {
+  void testEditProductIfValid() throws NoSuchElementException, InterruptedException, ExecutionException {
     PromoCode promoCode = promoCodes.getFirst();
     PromoCode editedPromo = promoCodes.getLast();
     editedPromo.setId(promoCode.getId());
@@ -92,7 +93,7 @@ public class PromoCodeServiceTest {
       .findById(promoCode.getId().toString());
 
     PromoCode result = promoCodeService
-      .edit(promoCode.getId().toString(), editedPromo);
+      .edit(promoCode.getId().toString(), editedPromo).get();
     verify(promoCodeRepository, times(1))
       .findById(promoCode.getId().toString());
     verify(promoCodeRepository, times(1))
@@ -110,26 +111,26 @@ public class PromoCodeServiceTest {
       .findAll();
 
     assertThrows(Exception.class, () -> {
-      PromoCode result = promoCodeService.edit(promoCode.getId().toString() ,promoCode);
+    promoCodeService.edit(promoCode.getId().toString() ,promoCode);
     });
     verify(promoCodeRepository, times(0)).save(promoCode);
   }
 
   @Test 
-  void testFindById() {
+  void testFindById() throws InterruptedException, ExecutionException {
     PromoCode promoCode = promoCodes.getFirst();
     doReturn(promoCode).when(promoCodeRepository)
       .findById(promoCode.getId().toString());
 
     PromoCode result = promoCodeService
-      .findById(promoCode.getId().toString());
+      .findById(promoCode.getId().toString()).get();
     verify(promoCodeRepository, times(1))
       .findById(promoCode.getId().toString());
     assertEquals(promoCode.getId(), result.getId());
   }
 
   @Test
-  void testDelete() {
+  void testDelete() throws NoSuchElementException, InterruptedException, ExecutionException {
     PromoCode promoCode = promoCodes.getFirst();
     doReturn(promoCode).when(promoCodeRepository)
       .deleteById(promoCode.getId().toString());
@@ -137,20 +138,33 @@ public class PromoCodeServiceTest {
       .findById(promoCode.getId().toString());
 
     PromoCode result = promoCodeService
-      .delete(promoCode.getId().toString());
+      .delete(promoCode.getId().toString()).get();
     verify(promoCodeRepository, times(1))
       .deleteById(promoCode.getId().toString());
     assertEquals(promoCode.getId(), result.getId());
   }
 
   @Test
-  void testFindAll() {
+  void testFindAll() throws InterruptedException, ExecutionException {
     doReturn(promoCodes.iterator()).when(promoCodeRepository)
       .findAll();
 
-    List<PromoCode> result = promoCodeService.findAll();
+    List<PromoCode> result = promoCodeService.findAll().get();
     verify(promoCodeRepository, times(1)).findAll();
     assertEquals(promoCodes.getFirst().getId(), result.getFirst().getId());
     assertEquals(promoCodes.getLast().getId(), result.getLast().getId());
+  }
+
+  @Test
+  void testFindByName() throws InterruptedException, ExecutionException {
+    PromoCode promoCode = promoCodes.getFirst();
+    doReturn(promoCode).when(promoCodeRepository)
+      .findByName(promoCode.getName());
+
+    PromoCode result = promoCodeService
+      .findByName(promoCode.getName()).get();
+    verify(promoCodeRepository, times(1))
+      .findByName(promoCode.getName());
+    assertEquals(promoCode.getId(), result.getId());
   }
 }

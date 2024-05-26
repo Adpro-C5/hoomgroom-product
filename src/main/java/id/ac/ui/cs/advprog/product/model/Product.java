@@ -3,12 +3,18 @@ package id.ac.ui.cs.advprog.product.model;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+@Table(name = "product")
+@Entity
 @Getter
 @Setter
 public class Product {
+  @Id
   private UUID id;
   private String productName;
   private ArrayList<String> categories;
