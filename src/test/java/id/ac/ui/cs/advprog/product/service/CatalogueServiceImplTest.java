@@ -185,7 +185,7 @@ public class CatalogueServiceImplTest {
 
     @Test
     void testShowFilteredProductMinimumPrice() throws Exception {
-        String filterType = "Harga Minimal";
+        String filterType = "Harga-Minimal";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 
@@ -203,7 +203,7 @@ public class CatalogueServiceImplTest {
 
     @Test
     void testShowFilteredProductMaximumPrice() throws Exception {
-        String filterType = "Harga Maksimal";
+        String filterType = "Harga-Maksimal";
 
         when(productRepository.findAll()).thenReturn(products.iterator());
 

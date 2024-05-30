@@ -38,11 +38,15 @@ public class CatalogueController {
         }
     }
 
-    @GetMapping("/product/{filterType}/")
+    @GetMapping("/product/filter/{filterType}")
     public ResponseEntity<List<Product>> productFilteredPage(@PathVariable("filterType") String filterType) {
         try {
-            List<Product> filteredProducts = catalogueService.showFilteredProduct(filterType).get();
-            return new ResponseEntity<>(filteredProducts, HttpStatus.OK);
+            CompletableFuture<List<Product>> filteredProducts = catalogueService.showFilteredProduct(filterType);
+            if (filteredProducts != null) {
+                return new ResponseEntity<>(filteredProducts.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
