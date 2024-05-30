@@ -93,16 +93,17 @@ public class CatalogueServiceImpl implements CatalogueService {
                     }
                 }
                 break;
-            case "Harga Minimal":
+            case "Harga-Minimal":
                 filteredProducts.addAll(products);
                 Collections.sort(filteredProducts, (p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
                 break;
-            case "Harga Maksimal":
+            case "Harga-Maksimal":
                 filteredProducts.addAll(products);
                 Collections.sort(filteredProducts, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
                 break;
             default:
                 filteredProducts = products;
+                break;
         }
         return CompletableFuture.completedFuture(filteredProducts);
     }
