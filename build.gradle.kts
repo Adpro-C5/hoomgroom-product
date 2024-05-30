@@ -50,6 +50,14 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
 }
 
+sonar {
+	properties {
+		property("sonar.projectKey", "Adpro-C5_hoomgroom-product")
+		property("sonar.organization", "advprog-c5")
+		property("sonar.host.url", "https://sonarcloud.io")
+	}
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
@@ -60,12 +68,12 @@ tasks.test {
 }
 tasks.jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.map {
-        fileTree(it) { exclude("**/*Application**") }
+        fileTree(it) { exclude("**/*Application**","**/enums/*", "**/config/*", "**/helper/*") }
     }))
     dependsOn(tasks.test) // tests are required to run before generating the report
     reports {
-        xml.required.set(false)
-        csv.required.set(false)
+        xml.required.set(true)
+        csv.required.set(true)
         html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
 }
