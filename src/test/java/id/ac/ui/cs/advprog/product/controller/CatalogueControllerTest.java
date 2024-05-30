@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -77,6 +78,26 @@ public class CatalogueControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(products, response.getBody());
+    }
+
+    @Test
+    void testProductFilteredPageNotFound() throws ExecutionException, InterruptedException {
+        String filterType = "actor";
+        when(catalogueService.showFilteredProduct(filterType)).thenReturn(CompletableFuture.completedFuture(null));
+
+        ResponseEntity<List<Product>> response = catalogueController.productFilteredPage(filterType);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testProductFilteredPageException() throws ExecutionException, InterruptedException {
+        String filterType = "actor";
+        when(catalogueService.showFilteredProduct(filterType)).thenThrow(new RuntimeException());
+
+        ResponseEntity<List<Product>> response = catalogueController.productFilteredPage(filterType);
+
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
     }
 }
 
